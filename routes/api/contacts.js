@@ -2,17 +2,11 @@ const express = require("express");
 
 const router = express.Router();
 
-const joi = require("joi");
-
 const { HttpError } = require("../../helpers");
 
-const contacts = require("../../models/contacts.js");
+const addContactValidationSchema = require("../../utils/validation/contactValidationSchemas");
 
-const addContactValidationSchema = joi.object({
-  name: joi.string().required(),
-  email: joi.string().email().required(),
-  phone: joi.number().required(),
-});
+const contacts = require("../../models/contacts.js");
 
 router.get("/", async (req, res, next) => {
   try {
@@ -27,7 +21,8 @@ router.get("/:contactId", async (req, res, next) => {
   try {
     const data = await contacts.getContactById(req.params.contactId);
     if (!data) {
-      throw HttpError(404, "Contact not found");
+      const error = new HttpError(404, "Contact not found");
+      throw error;
     }
     res.status(200).json(data);
   } catch (error) {
@@ -37,9 +32,10 @@ router.get("/:contactId", async (req, res, next) => {
 
 router.post("/", async (req, res, next) => {
   try {
-    const { error } = validationScheme.validate(req.body);
+    const { error } = addContactValidationSchema.validate(req.body);
     if (error) {
-      throw HttpError(400, error.message);
+      const err = new HttpError(400, error.message);
+      throw err;
     }
     const data = await contacts.addContact(req.body);
     res.status(201).json(data);
@@ -52,7 +48,8 @@ router.delete("/:contactId", async (req, res, next) => {
   try {
     const data = await contacts.removeContact(req.params.contactId);
     if (!data) {
-      throw HttpError(404, "Contact not found");
+      const error = new HttpError(404, "Contact not found");
+      throw error;
     }
     res.json({ message: "contact deleted" });
   } catch (error) {
@@ -62,13 +59,15 @@ router.delete("/:contactId", async (req, res, next) => {
 
 router.put("/:contactId", async (req, res, next) => {
   try {
-    const { error } = validationScheme.validate(req.body);
+    const { error } = addContactValidationSchema.validate(req.body);
     if (error) {
-      throw HttpError(400, error.message);
+      const err = new HttpError(400, error.message);
+      throw err;
     }
     const data = await contacts.updateContact(req.params.contactId, req.body);
     if (!data) {
-      throw HttpError(404, "Contact not found");
+      const error = new HttpError(404, "Contact not found");
+      throw error;
     }
     res.status(200).json(data);
   } catch (error) {
