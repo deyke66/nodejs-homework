@@ -8,7 +8,7 @@ const { HttpError } = require("../../helpers");
 
 const contacts = require("../../models/contacts.js");
 
-const validationScheme = joi.object({
+const addContactValidationSchema = joi.object({
   name: joi.string().required(),
   email: joi.string().email().required(),
   phone: joi.number().required(),
