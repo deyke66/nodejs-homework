@@ -6,4 +6,8 @@ const addContactValidationSchema = joi.object({
   phone: joi.number().required(),
 });
 
-module.exports = addContactValidationSchema;
+const addFavoriteValidatedSchema = joi.object({
+  favorite: joi.boolean().required(),
+});
+
+module.exports = { addContactValidationSchema, addFavoriteValidatedSchema };
