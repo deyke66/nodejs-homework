@@ -4,10 +4,10 @@ const { HttpError } = require("../helpers/httpError");
 
 const {
   addContactValidationSchema,
-  addFavoriteValidatedSchema,
+  addFavoriteValidationSchema,
 } = require("../utils/validation/contactValidationSchemas");
 
-async function getAll(req, res, next) {
+async function getAllContacts(req, res, next) {
   try {
     const data = await Contact.find();
     res.status(200).json(data);
@@ -16,7 +16,7 @@ async function getAll(req, res, next) {
   }
 }
 
-async function getById(req, res, next) {
+async function getContactsById(req, res, next) {
   try {
     const data = await Contact.findOne({ _id: req.params.contactId });
     if (!data) {
@@ -80,7 +80,7 @@ async function updateContact(req, res, next) {
 
 async function updateStatusContact(req, res, next) {
   try {
-    const { error } = addFavoriteValidatedSchema.validate(req.body);
+    const { error } = addFavoriteValidationSchema.validate(req.body);
     if (error) {
       const err = new HttpError(400, error.message);
       throw err;
@@ -101,8 +101,8 @@ async function updateStatusContact(req, res, next) {
 }
 
 module.exports = {
-  getAll,
-  getById,
+  getAllContacts,
+  getContactsById,
   addNewContact,
   removeContact,
   updateContact,
