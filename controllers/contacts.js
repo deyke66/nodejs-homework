@@ -60,8 +60,7 @@ async function updateContact(req, res, next) {
   try {
     const { error } = addContactValidationSchema.validate(req.body);
     if (error) {
-      const err = new HttpError(400, error.message);
-      throw err;
+      throw new HttpError(400, error.message);
     }
     const data = await Contact.findByIdAndUpdate(
       req.params.contactId,
