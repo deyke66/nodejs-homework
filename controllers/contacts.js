@@ -78,7 +78,7 @@ async function updateContact(req, res, next) {
   }
 }
 
-async function updateFavorite(req, res, next) {
+async function updateStatusContact(req, res, next) {
   try {
     const { error } = addFavoriteValidatedSchema.validate(req.body);
     if (error) {
@@ -106,5 +106,5 @@ module.exports = {
   addNewContact,
   removeContact,
   updateContact,
-  updateFavorite,
+  updateStatusContact,
 };
